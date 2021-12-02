@@ -1,12 +1,13 @@
 {
-  "name": "navigo",
+  "name": "@zepdev/navigo",
   "version": "8.11.1",
   "description": "A simple vanilla JavaScript router",
-  "main": "lib/navigo.js",
-  "browser": "lib/navigo.min.js",
-  "module": "lib/es/index.js",
-  "jsnext:main": "lib/navigo.js",
+  "main": "lib/es/index.js",
   "types": "./index.d.ts",
+  "engines": {
+    "node": ">=16.10.0",
+    "npm": ">=7.24.0"
+  },
   "author": {
     "name": "Krasimir Tsonev",
     "email": "me@krasimir.dev",
@@ -20,8 +21,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:krasimir/navigo.git"
+    "url": "git+https://github.com/zepdev/navigo.git"
   },
+  "bugs": {
+    "url": "https://github.com/zepdev/navigo/issues"
+  },
+  "homepage": "https://github.com/zepdev/navigo#readme",
   "scripts": {
     "dev": "webpack --progress --watch --env dev",
     "dev-amd": "webpack --progress --watch --env dev --amd",
@@ -61,10 +66,9 @@
     "yargs": "^10.0.3"
   },
   "files": [
-      "lib/*",
-      "index.d.ts"
+    "lib/*",
+    "index.d.ts"
   ],
-
   "jest": {
     "setupFilesAfterEnv": [
       "./jest/setup.js"
@@ -73,26 +77,26 @@
     "globals": {}
   },
   "release": {
-      "branches": [
-          "master"
-      ],
-      "plugins": [
-          "@semantic-release/commit-analyzer",
-          "@semantic-release/release-notes-generator",
-          "@semantic-release/github"
-      ],
-      "prepare": [
-          "@semantic-release/changelog",
-          "@semantic-release/npm",
-          {
-              "path": "@semantic-release/git",
-              "assets": [
-                  "index.d.ts",
-                  "package.json",
-                  "package-lock.json",
-                  "CHANGELOG.md"
-              ]
-          }
-      ]
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github"
+    ],
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "index.d.ts",
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ]
+      }
+    ]
   }
 }
