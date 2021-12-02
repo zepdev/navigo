@@ -118,8 +118,9 @@ To add a route use the `on` method. It can be used in four different ways. The f
 
 ```js
 const router = new Navigo('/');
-router.on('/foo/bar', () => {
+router.on('/foo/bar', (done) => {
   // Fired if the page URL matches '/foo/bar'.
+  done();
 });
 ```
 
@@ -127,8 +128,9 @@ The path in this case could be also a regular expression. For example:
 
 ```js
 const router = new Navigo('/');
-router.on(/foo\/(.*)/, () => {
+router.on(/foo\/(.*)/, (done) => {
   // Fired if the page URL matches '/foo/bar'.
+  done();
 });
 ```
 
@@ -136,23 +138,26 @@ If you skip the path you are basically defining a handler for your root.
 
 ```js
 const router = new Navigo('/my/app');
-router.on(() => {
+router.on((done) => {
   // Fired if the page URL matches '/my/app' route.
   // Or in other words the home of your app.
+  done();
 })
 ```
 
-The `on` method is chainable so you can call `on('...', () => {}).on('...', () => {})` if you want.
+The `on` method is chainable so you can call `on('...', (done) => {}).on('...', (done) => {})` if you want.
 
 The next option is to define a key-value pairs of your routes:
 
 ```js
 router.on({
-  '/foo/bar': () => {
+  '/foo/bar': (done) => {
     // Fired if the route matches '/foo/bar'.
+    done();
   },
-  '/foo/zar': () => {
+  '/foo/zar': (done) => {
     // Fired if the route matches '/foo/zar'.
+    done();
   }
 });
 ```
@@ -163,14 +168,16 @@ And the most complex one is by giving your route a name (via the `as` field). Th
 router.on({
   '/foo/bar': {
     as: 'routeA',
-    uses: () => {
+    uses: (done) => {
        // Fired if the route matches '/foo/bar'.
+      done();
     }
-  }
+  },
   '/foo/bar': {
     as: 'routeB',
-    uses: () => {
+    uses: (done) => {
        // Fired if the route matches '/foo/bar'.
+      done();
     }
   }
 })
@@ -185,8 +192,9 @@ The parameterized routes have paths that contain dynamic parts. For example:
 ```js
 const router = new Navigo('/');
 
-router.on('/user/:id/:action', ({ data }) => {
+router.on('/user/:id/:action', (done, { data }) => {
   console.log(data); // { id: 'xxx', action: 'save' }
+  done();
 });
 
 router.resolve('/user/xxx/save');
@@ -198,8 +206,9 @@ Parameterized routes happen also when we use a regular expression as a path. It'
 
 ```js
 const router = new Navigo('/');
-router.on(/rock\/(.*)\/(.*)/, ({ data }) => {
+router.on(/rock\/(.*)\/(.*)/, (done, { data }) => {
   console.log(data); // ["paper", "scissors"]
+  done();
 });
 router.resolve("/rock/paper/scissors");
 ```
@@ -211,10 +220,11 @@ Navigo captures the GET params of the matched routes. For example:
 ```js
 const router = new Navigo('/');
 
-router.on('/user/:id/:action', ({ data, params, queryString }) => {
+router.on('/user/:id/:action', (done, { data, params, queryString }) => {
   console.log(data); // { id: 'xxx', action: 'save' }
   console.log(params); // { m: "n", k: "z" }
   console.log(queryString); // "m=n&k=z"
+  done();
 });
 
 router.resolve('/user/xxx/save?m=n&k=z');
@@ -227,8 +237,9 @@ Navigo captures the hash bit of the URL for the matched routes. For example:
 ```js
 const router = new Navigo('/');
 
-router.on('/foobar', ({ hashString }) => {
+router.on('/foobar', (done, { hashString }) => {
   console.log(hashString); // something-else
+  done();
 });
 
 router.resolve('/foobar#something-else');
@@ -239,25 +250,25 @@ router.resolve('/foobar#something-else');
 Navigo relies on regular expressions to match strings against location paths. This logic is abstracted and for the final user we have a simple [DSL](https://en.wikipedia.org/wiki/Domain-specific_language). Here are couple of examples:
 
 ```js
-router.on('/foo', () => {});
+router.on('/foo', (done) => done());
 // matches specifically "/foo"
 
-router.on('/foo/:name', () => {});
+router.on('/foo/:name', (done) => done());
 // matches "/foo/my-name-here"
 
-router.on(':page', () => {});
+router.on(':page', (done) => done());
 // matches "/about-page"
 
-router.on('/foo/*', () => {});
+router.on('/foo/*', (done) => done());
 // matches "/foo/a/b/c"
 
-router.on('*', () => {});
+router.on('*', (done) => done());
 // matches "/foo/bar/moo"
 
-router.on(/rock\/(.*)\/(.*)/, () => {});
+router.on(/rock\/(.*)\/(.*)/, (done) => done());
 // matches "/rock/paper/scissors"
 
-router.on('/foo/:id/?', () => {});
+router.on('/foo/:id/?', (done) => done());
 // matches "/foo/20/save" and also "/foo/20"
 ```
 
@@ -305,11 +316,13 @@ Consider the following example:
 const router = new Navigo("/");
 
 router
-  .on("/foo/bar", () => {
+  .on("/foo/bar", (done) => {
     console.log('Nope');
+    done();
   })
-  .on("/about", () => {
+  .on("/about", (done) => {
     console.log('This is About page');
+    done();
   });
 
 router.navigate("about");
@@ -343,8 +356,9 @@ Very often we have complex URLs and we want to have a quick way to reach them. `
 route.on({
   "/users/:name": { 
     as: "user",
-    uses: (match) => {
+    uses: (done, match) => {
       console.log(match.data.name); // Krasimir
+      done();
     }
   },
 });
@@ -477,7 +491,7 @@ If you want to check if some path is matching any of the routes without triggeri
 ```js
 const r: Navigo = new Navigo("/");
 
-r.on("/user/:id", () => {});
+r.on("/user/:id", (done) => done());
 
 console.log(r.match("/nope"));
 // result: false
@@ -545,9 +559,9 @@ The hooks object has the following signature:
 ```typescript
 type RouteHooks = {
   before?: (done: Function, match: Match) => void;
-  after?: (match: Match) => void;
+  after?: (done: Function, match: Match) => void;
   leave?: (done: Function, match: Match) => void;
-  already?: (match: Match) => void;
+  already?: (done: Function, match: Match) => void;
 };
 ```
 
@@ -562,7 +576,7 @@ The `on` method accepts a hooks object as a last argument. For example:
 
 ```js
 // for specific path
-router.on('/foo/bar/', () => {...}, {
+router.on('/foo/bar/', (done) => done(), {
   before(done, match) {
     // do something
     done();
@@ -570,7 +584,7 @@ router.on('/foo/bar/', () => {...}, {
 });
 
 // for the root
-router.on(() => {...}, {
+router.on((done) => done(), {
   before(done, match) {
     // do something
     done();
@@ -592,7 +606,7 @@ r.on({
 });
 
 // with the notFound method
-router.notFound(() => {...}, {
+router.notFound((done) => done(), {
   before(done, match) {
     // do something
     done();
@@ -612,8 +626,8 @@ router.hooks({
     done();
   }
 });
-router.on("/foo/bar", () => {});
-router.on("/", () => {});
+router.on("/foo/bar", (done) => done());
+router.on("/", (done) => done());
 ```
 
 ### Adding a hook to already defined route
@@ -623,10 +637,11 @@ Sometimes you may need to add a hook to a route later. In such cases use the fol
 ```js
 const router = new Navigo("/");
 
-router.on("/foo/bar", () => {});
+router.on("/foo/bar", (done) => done());
 const cleanup = router.addBeforeHook('foo/bar', (done) => {
   // my before hook logic
-})
+  done();
+});
 
 // ... some other logic
 cleanup();
@@ -652,7 +667,7 @@ const router = new Navigo('/my/app');
 router.link('blah'); // "/my/app/blah
 
 router.on({
-  "/user/:id/:action": { as: "RouteNameHere", uses: () => {} },
+  "/user/:id/:action": { as: "RouteNameHere", uses: (done) => done() },
 });
 
 r.generate("RouteNameHere", { id: "xxx", action: "save" }); // "/my/app/user/xxx/save"
@@ -673,8 +688,9 @@ Navigo offers a special handler for the cases where a no match is found.
 ```js
 const router = new Navigo('/');
 
-router.notFound(() => {
+router.notFound((done) => {
   // this runs if there is no match found
+  done();
 });
 ```
 
@@ -752,9 +768,9 @@ type Route = {
 ```typescript
 type RouteHooks = {
   before?: (done: Function, match: Match) => void;
-  after?: (match: Match) => void;
+  after?: (done: Function, match: Match) => void;
   leave?: (done: Function, match: Match | Match[]) => void;
-  already?: (match: Match) => void;
+  already?: (done: Function, match: Match) => void;
 };
 ```
 

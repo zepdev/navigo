@@ -1,5 +1,6 @@
 import { QContext } from "../../index";
 import { undefinedOrTrue } from "../utils";
+import executeHook from "./executeHook";
 
 export default function checkForAlreadyHook(context: QContext, done) {
   const current = context.instance.lastResolved();
@@ -10,15 +11,18 @@ export default function checkForAlreadyHook(context: QContext, done) {
     current[0].url === context.match.url &&
     current[0].queryString === context.match.queryString
   ) {
-    current.forEach((c) => {
-      if (c.route.hooks && c.route.hooks.already) {
-        if (undefinedOrTrue(context.navigateOptions, "callHooks")) {
-          c.route.hooks.already.forEach((f) => f(context.match));
+    const hooks = current.reduce((acc, c) => {
+        if (c.route.hooks && c.route.hooks.already && undefinedOrTrue(context.navigateOptions, "callHooks")) {
+            acc = acc.concat(c.route.hooks.already);
         }
-      }
-    });
-    done(false);
+        return acc;
+    }, []);
+
+    //c.route.hooks.already.forEach((f) => f(context.match));
+    executeHook(context, done, hooks, context.match, [false]);
     return;
   }
-  done();
+  else {
+    done();
+  }
 }

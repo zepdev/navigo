@@ -24,14 +24,12 @@ describe("Given the Navigo library", () => {
   });
   describe("and the problem described in #116", function () {
     it("should handle properly the parameter", function () {
-      var handler = jest.fn();
-
       let router = new Navigo("/");
-      handler = jest.fn();
+      const handler = jest.fn((done) => done());
       router.on("/user/:name", handler);
       router.resolve("/user/Krasimir%20Tsonev");
       expect(handler).toBeCalled();
-      expect(handler).toBeCalledWith(
+      expect(handler).toBeCalledWith(expect.any(Function),
         expect.objectContaining({
           data: { name: "Krasimir Tsonev" },
         })
@@ -55,8 +53,8 @@ describe("Given the Navigo library", () => {
   });
   describe("and the feature described in #136", function () {
     it("should call the already hook", function () {
-      const handler = jest.fn();
-      const alreadyHandler = jest.fn();
+      const handler = jest.fn((done) => done());
+      const alreadyHandler = jest.fn((done) => done());
       const router: NavigoRouter = new Navigo("/");
 
       router.on("/:moduleName", handler, {
@@ -74,8 +72,8 @@ describe("Given the Navigo library", () => {
   });
   describe("and the feature described in #146", function () {
     it("should resolve the proper route", function () {
-      const handler1 = jest.fn();
-      const handler2 = jest.fn();
+      const handler1 = jest.fn((done) => done());
+      const handler2 = jest.fn((done) => done());
 
       let router: NavigoRouter = new Navigo("/");
 
@@ -88,7 +86,7 @@ describe("Given the Navigo library", () => {
 
       expect(handler1).not.toBeCalledTimes(1);
       expect(handler2).toBeCalledTimes(1);
-      expect(handler2).toBeCalledWith(
+      expect(handler2).toBeCalledWith(expect.any(Function),
         expect.objectContaining({ data: { name: "my_restaurant" } })
       );
     });
@@ -99,7 +97,7 @@ describe("Given the Navigo library", () => {
       const replace = jest.spyOn(history, "replaceState");
       const router: NavigoRouter = new Navigo("/");
 
-      router.notFound(() => {});
+      router.notFound((done) => done());
       router.navigate("/rock1");
       router.navigate("/rock2", { historyAPIMethod: "replaceState" });
       router.navigate("/rock3");
@@ -129,38 +127,38 @@ describe("Given the Navigo library", () => {
   });
   describe("and the bug described in #162", function () {
     it("should properly resolve the route handler even tho there is no dynamic param", function () {
-      const spy = jest.fn();
+      const spy = jest.fn((done) => done());
       const router: NavigoRouter = new Navigo("/");
 
       router.on("/home", spy);
       router.resolve("/home?hey=bug");
 
-      expect(spy).toBeCalledWith(
+      expect(spy).toBeCalledWith(expect.any(Function),
         expect.objectContaining({ url: "home", params: { hey: "bug" } })
       );
     });
   });
   describe("and the issue #167", function () {
     it("should have parameterized routes that work", function () {
-      const handler = jest.fn();
+      const handler = jest.fn((done) => done());
       const router: NavigoRouter = new Navigo("/");
 
       router.on("/products/:id", handler);
 
       router.resolve("/products/421");
 
-      expect(handler).toBeCalledWith(
+      expect(handler).toBeCalledWith(expect.any(Function),
         expect.objectContaining({ data: { id: "421" } })
       );
     });
   });
   describe("Given the issue #174", function () {
     it("should call the handler when we pass a hook object but no before and after", function () {
-      const handler = jest.fn();
+      const handler = jest.fn((done) => done());
       const router: NavigoRouter = new Navigo("/");
-      const alreadyHandler = jest.fn();
-      const leaveHandler = jest.fn().mockImplementation((done) => done());
-      const aboutHandler = jest.fn();
+      const alreadyHandler = jest.fn((done) => done());
+      const leaveHandler = jest.fn((done) => done());
+      const aboutHandler = jest.fn((done) => done());
 
       router.on("/products/:id", handler, {
         already: alreadyHandler,
@@ -173,11 +171,11 @@ describe("Given the Navigo library", () => {
       router.resolve("/about");
 
       expect(handler).toBeCalledTimes(1);
-      expect(handler).toBeCalledWith(
+      expect(handler).toBeCalledWith(expect.any(Function),
         expect.objectContaining({ data: { id: "421" } })
       );
       expect(alreadyHandler).toBeCalledTimes(1);
-      expect(alreadyHandler).toBeCalledWith(
+      expect(alreadyHandler).toBeCalledWith(expect.any(Function),
         expect.objectContaining({
           data: { id: "421" },
         })
@@ -190,16 +188,16 @@ describe("Given the Navigo library", () => {
     it("should call the hook every time when we leave a route", () => {
       const r: NavigoRouter = new Navigo("/");
       const hooks = {
-        leave: jest.fn().mockImplementation((done) => done()),
+        leave: jest.fn((done) => done()),
       };
-      const h1 = jest.fn();
-      const h2 = jest.fn();
+      const h1 = jest.fn((done) => done());
+      const h2 = jest.fn((done) => done());
 
       r.hooks(hooks);
 
       r.on("/foo/bar", h1);
       r.on("/x/y", h2);
-      r.notFound(() => {});
+      r.notFound((done) => done());
 
       r.navigate("/foo/bar");
       r.navigate("/x/y");
@@ -229,7 +227,7 @@ describe("Given the Navigo library", () => {
   describe("and the request described in #245", function () {
     it("should properly resolve the child path without the need of a parent path", function () {
       const router: NavigoRouter = new Navigo("/");
-      const handler = jest.fn();
+      const handler = jest.fn((done) => done());
 
       router
         .on({
@@ -238,7 +236,7 @@ describe("Given the Navigo library", () => {
         .resolve("/email-verification/x");
 
       expect(handler).toBeCalledTimes(1);
-      expect(handler).toBeCalledWith(
+      expect(handler).toBeCalledWith(expect.any(Function),
         expect.objectContaining({
           url: "email-verification/x",
           data: { emailVerificationCode: "x" },
@@ -249,9 +247,9 @@ describe("Given the Navigo library", () => {
   describe("and the problem described in #253", function () {
     it("should properly extract the data from the url", function () {
       const router: NavigoRouter = new Navigo("/");
-      const handler = jest.fn();
-      const before = jest.fn().mockImplementation((done) => done());
-      const after = jest.fn();
+      const handler = jest.fn((done) => done());
+      const before = jest.fn((done) => done());
+      const after = jest.fn((done) => done());
       const expectedMatch = expect.objectContaining({
         url: "user/42/save",
         data: ["42", "save"],
@@ -265,19 +263,19 @@ describe("Given the Navigo library", () => {
       router.navigate("/user/42/save");
 
       expect(handler).toBeCalledTimes(1);
-      expect(handler).toBeCalledWith(expectedMatch);
+      expect(handler).toBeCalledWith(expect.any(Function), expectedMatch);
       expect(before).toBeCalledTimes(1);
       expect(before).toBeCalledWith(expect.any(Function), expectedMatch);
       expect(after).toBeCalledTimes(1);
-      expect(after).toBeCalledWith(expectedMatch);
+      expect(after).toBeCalledWith(expect.any(Function), expectedMatch);
     });
   });
   describe("and the problem described in #262", function () {
     it("should replace the URL but execute the first route", () => {
       history.pushState({}, "", "/abc-1234");
       const router: NavigoRouter = new Navigo("/");
-      const handler1 = jest.fn();
-      const handler2 = jest.fn();
+      const handler1 = jest.fn((done) => done());
+      const handler2 = jest.fn((done) => done());
 
       router.on({
         "/abc-1234": {
@@ -308,7 +306,7 @@ describe("Given the Navigo library", () => {
       router.resolve();
 
       expect(handler1).toBeCalledTimes(1);
-      expect(handler1).toBeCalledWith(
+      expect(handler1).toBeCalledWith(expect.any(Function),
         expect.objectContaining({
           url: "abc-1234",
         })
@@ -319,8 +317,8 @@ describe("Given the Navigo library", () => {
   });
   describe("and the problem described in #270", () => {
     it("should not throw an error", () => {
-      const h1 = jest.fn();
-      const h2 = jest.fn();
+      const h1 = jest.fn((done) => done());
+      const h2 = jest.fn((done) => done());
       const r: NavigoRouter = new Navigo("/");
 
       r.on(/xyz\/[0-9a-z]{4,8}$/, h1, {
@@ -340,13 +338,13 @@ describe("Given the Navigo library", () => {
       r.navigate("/xyz/asdf/sub");
 
       expect(h1).toBeCalledTimes(1);
-      expect(h1).toBeCalledWith(
+      expect(h1).toBeCalledWith(expect.any(Function),
         expect.objectContaining({
           url: "xyz/asdf",
         })
       );
       expect(h2).toBeCalledTimes(1);
-      expect(h2).toBeCalledWith(
+      expect(h2).toBeCalledWith(expect.any(Function),
         expect.objectContaining({
           url: "xyz/asdf/sub",
           data: ["asdf", "sub"],
@@ -357,12 +355,12 @@ describe("Given the Navigo library", () => {
   describe("and the problem described in #271", () => {
     it("should call the leave hook of the not found handler", () => {
       const router: NavigoRouter = new Navigo("/");
-      const existing = jest.fn();
-      const nonExisting = jest.fn();
-      const leave = jest.fn().mockImplementation((done) => done());
-      const before = jest.fn().mockImplementation((done) => done());
-      const after = jest.fn();
-      const already = jest.fn();
+      const existing = jest.fn((done) => done());
+      const nonExisting = jest.fn((done) => done());
+      const leave = jest.fn((done) => done());
+      const before = jest.fn((done) => done());
+      const after = jest.fn((done) => done());
+      const already = jest.fn((done) => done());
 
       router.on("existing", existing);
       router.notFound(nonExisting, {
@@ -426,15 +424,16 @@ describe("Given the Navigo library", () => {
   describe("(#273) when we have a `*` as a route handler and we navigate from the leave hook", () => {
     it("should allow the navigation", (testFinished) => {
       const r: NavigoRouter = new Navigo("/");
-      const h1 = jest.fn();
-      const h2 = jest.fn().mockImplementation(() => {
+      const h1 = jest.fn((done) => done());
+      const h2 = jest.fn((done) => {
         setTimeout(() => {
           r.navigate("/products");
         }, 10);
+        done();
       });
-      const h3 = jest.fn();
+      const h3 = jest.fn((done) => done());
       let authorized = false;
-      const leave = jest.fn().mockImplementation((done, match) => {
+      const leave = jest.fn((done, match) => {
         if (!authorized) {
           authorized = true;
           done(false);

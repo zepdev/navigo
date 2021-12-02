@@ -1,5 +1,6 @@
 import { QContext } from "../../index";
 import { undefinedOrTrue } from "../utils";
+import executeHook from "./executeHook";
 
 export default function checkForAfterHook(context: QContext, done) {
   if (
@@ -7,7 +8,9 @@ export default function checkForAfterHook(context: QContext, done) {
     context.match.route.hooks.after &&
     undefinedOrTrue(context.navigateOptions, "callHooks")
   ) {
-    context.match.route.hooks.after.forEach((f) => f(context.match));
+    executeHook(context, done, context.match.route.hooks.after, context.match);
   }
-  done();
+  else {
+    done();
+  }
 }

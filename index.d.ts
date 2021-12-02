@@ -4,7 +4,7 @@ export type Route = {
   handler: Handler;
   hooks: RouteHooksStorage;
 };
-export type Handler = (match?: Match) => void;
+export type Handler = (done: Function, match?: Match) => void;
 export type Match = {
   url: string;
   queryString: string;
@@ -14,9 +14,9 @@ export type Match = {
   params: { [key: string]: string } | null;
 };
 export type BeforeHook = (done: Function, match: Match) => void;
-export type AfterHook = (match: Match) => void;
+export type AfterHook = (done: Function, match: Match) => void;
 export type LeaveHook = (done: Function, match: Match | Match[]) => void;
-export type AlreadyHook = (match: Match) => void;
+export type AlreadyHook = (done: Function, match: Match) => void;
 export type RouteHooks = {
   before?: BeforeHook;
   after?: AfterHook;

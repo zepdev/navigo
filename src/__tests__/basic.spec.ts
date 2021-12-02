@@ -57,10 +57,8 @@ describe("Given the Navigo library", () => {
     describe('and when using "named routes"', () => {
       it("should allow us to define routes", () => {
         const r: NavigoRouter = new Navigo("/");
-        const handler = jest.fn();
-        const hook = jest.fn().mockImplementation((done) => {
-          done();
-        });
+        const handler = jest.fn((done) => done());
+        const hook = jest.fn((done) => done());
 
         r.on({
           "/foo": { as: "my foo", uses: handler, hooks: { before: hook } },
@@ -71,12 +69,12 @@ describe("Given the Navigo library", () => {
         r.resolve("bar");
 
         expect(handler).toBeCalledTimes(2);
-        expect(handler).toBeCalledWith(
+        expect(handler).toBeCalledWith(expect.any(Function),
           expect.objectContaining({
             route: expect.objectContaining({ name: "my foo" }),
           })
         );
-        expect(handler).toBeCalledWith(
+        expect(handler).toBeCalledWith(expect.any(Function),
           expect.objectContaining({
             route: expect.objectContaining({ name: "my bar" }),
           })
@@ -181,8 +179,8 @@ describe("Given the Navigo library", () => {
     });
     it("should create an instance of Route for each route and Match+Route if there is matching paths", () => {
       const r: NavigoRouter = new Navigo("/");
-      r.on("/about/", () => {})
-        .on(() => {})
+      r.on("/about/", (done) => done())
+        .on((done) => done())
         .resolve("/about?a=b");
 
       expect(r.routes).toStrictEqual([
@@ -219,13 +217,13 @@ describe("Given the Navigo library", () => {
       it("should properly register the routes", () => {
         history.pushState({}, "", "/app/foo/bar");
         const r: NavigoRouter = new Navigo("/app", { strategy: "ALL" });
-        const handlerA = jest.fn();
+        const handlerA = jest.fn((done) => done());
         const hooksA = {
-          leave: jest.fn().mockImplementation((done) => done()),
+          leave: jest.fn((done) => done()),
         };
-        const handlerB = jest.fn();
+        const handlerB = jest.fn((done) => done());
         const hooksB = {
-          leave: jest.fn().mockImplementation((done) => done()),
+          leave: jest.fn((done) => done()),
         };
 
         r.on("/foo/:id", handlerA, hooksA);
@@ -297,7 +295,7 @@ describe("Given the Navigo library", () => {
       const warn = jest.spyOn(console, "warn");
       warn.mockImplementation(() => {});
       const r: NavigoRouter = new Navigo("/");
-      r.on("/foo", () => {});
+      r.on("/foo", (done) => done());
       r.navigate("/foo");
 
       expect(r.lastResolved()).toStrictEqual([
@@ -318,13 +316,13 @@ describe("Given the Navigo library", () => {
   describe("when resolving a route", () => {
     it("should call our handler", () => {
       const r: NavigoRouter = new Navigo("/");
-      const handler = jest.fn();
+      const handler = jest.fn((done) => done());
       r.on("foo/:id", handler);
       r.on("foo/xxx-yyy-zzz", handler);
       r.resolve("/foo/xxx-yyy-zzz");
 
       expect(handler).toBeCalledTimes(1);
-      expect(handler).toBeCalledWith({
+      expect(handler).toBeCalledWith(expect.any(Function), {
         data: { id: "xxx-yyy-zzz" },
         params: null,
         route: expect.any(Object),
@@ -335,8 +333,8 @@ describe("Given the Navigo library", () => {
     });
     it("should take into account the order of the routes definition", () => {
       const r: NavigoRouter = new Navigo("/");
-      const handlerA = jest.fn();
-      const handlerB = jest.fn();
+      const handlerA = jest.fn((done) => done());
+      const handlerB = jest.fn((done) => done());
 
       r.on("foo/bar", handlerA);
       r.on("foo/*", handlerB);
@@ -349,7 +347,7 @@ describe("Given the Navigo library", () => {
     });
     it("should call the handler once if the matched route is the same", () => {
       const r: NavigoRouter = new Navigo("/");
-      const handler = jest.fn();
+      const handler = jest.fn((done) => done());
 
       r.on("foo/:id", handler);
 
@@ -359,13 +357,13 @@ describe("Given the Navigo library", () => {
       r.resolve("/foo/moo?a=10");
 
       expect(handler).toBeCalledTimes(3);
-      expect(handler.mock.calls[0][0]).toMatchObject({
+      expect(handler.mock.calls[0][1]).toMatchObject({
         data: { id: "bar" },
       });
-      expect(handler.mock.calls[1][0]).toMatchObject({
+      expect(handler.mock.calls[1][1]).toMatchObject({
         data: { id: "moo" },
       });
-      expect(handler.mock.calls[2][0]).toMatchObject({
+      expect(handler.mock.calls[2][1]).toMatchObject({
         data: { id: "moo" },
         params: { a: "10" },
       });
@@ -373,8 +371,8 @@ describe("Given the Navigo library", () => {
     describe("and we add the same matching route again", () => {
       it("should resolve the newly added route", () => {
         const r: NavigoRouter = new Navigo("/", { strategy: "ALL" });
-        const h1 = jest.fn();
-        const h2 = jest.fn();
+        const h1 = jest.fn((done) => done());
+        const h2 = jest.fn((done) => done());
 
         r.on("/foo", h1);
         r.resolve("/foo");
@@ -383,9 +381,9 @@ describe("Given the Navigo library", () => {
 
         expect(r.routes).toHaveLength(2);
         expect(h1).toBeCalledTimes(1);
-        expect(h1).toBeCalledWith(expect.objectContaining({ url: "foo" }));
+        expect(h1).toBeCalledWith(expect.any(Function), expect.objectContaining({ url: "foo" }));
         expect(h2).toBeCalledTimes(1);
-        expect(h2).toBeCalledWith(expect.objectContaining({ url: "foo" }));
+        expect(h2).toBeCalledWith(expect.any(Function), expect.objectContaining({ url: "foo" }));
       });
     });
   });
@@ -393,8 +391,14 @@ describe("Given the Navigo library", () => {
     it("should resolve their handlers and their hooks", () => {
       const r: NavigoRouter = new Navigo("/");
       const order = [];
-      const handlerA = jest.fn().mockImplementation(() => order.push("a"));
-      const handlerB = jest.fn().mockImplementation(() => order.push("b"));
+      const handlerA = jest.fn().mockImplementation((done) => {
+         order.push("a");
+         done();
+      });
+      const handlerB = jest.fn().mockImplementation((done) => {
+        order.push("b");
+        done();
+      });
 
       r.on("/foo", handlerA, {
         before: (done) => {
@@ -405,8 +409,9 @@ describe("Given the Navigo library", () => {
           order.push("leaveA");
           done();
         },
-        after: () => {
+        after: (done) => {
           order.push("afterA");
+          done();
         },
       });
       r.on("/foo", handlerB, {
@@ -418,12 +423,16 @@ describe("Given the Navigo library", () => {
           order.push("leaveB");
           done();
         },
-        after: () => {
+        after: (done) => {
           order.push("afterB");
+          done();
         },
       });
 
-      r.on("/bar", () => order.push("bar"));
+      r.on("/bar", (done) => {
+        order.push("bar");
+        done();
+      });
 
       r.navigate("/foo?a=b", { resolveOptions: { strategy: "ALL" } });
       r.navigate("/bar?a=b", { resolveOptions: { strategy: "ALL" } });
@@ -446,8 +455,8 @@ describe("Given the Navigo library", () => {
   describe("when we change the default resolving strategy", () => {
     it("should use the new value", () => {
       const r: NavigoRouter = new Navigo("/", { strategy: "ALL" });
-      const handlerA = jest.fn();
-      const handlerB = jest.fn();
+      const handlerA = jest.fn((done) => done());
+      const handlerB = jest.fn((done) => done());
       const expectedObject = expect.objectContaining({ url: "foo/bar" });
       r.on("/foo/bar", handlerA).on("/foo/:something", handlerB);
       r.navigate("/foo/bar");
@@ -455,16 +464,16 @@ describe("Given the Navigo library", () => {
       expect(handlerB).toBeCalledTimes(1);
       expect(r.lastResolved()).toHaveLength(2);
       expect(r.current).toHaveLength(2);
-      expect(handlerA).toBeCalledWith(expectedObject);
-      expect(handlerB).toBeCalledWith(expectedObject);
+      expect(handlerA).toBeCalledWith(expect.any(Function),expectedObject);
+      expect(handlerB).toBeCalledWith(expect.any(Function),expectedObject);
     });
     it("should respect the resolveOptions passed to navigate and resolve", () => {
       const r: NavigoRouter = new Navigo("/", { strategy: "ALL" });
-      const handlerA = jest.fn();
-      const handlerB = jest.fn();
+      const handlerA = jest.fn((done) => done());
+      const handlerB = jest.fn((done) => done());
       r.on("/foo/bar", handlerA)
         .on("/foo/:something", handlerB)
-        .notFound(() => {});
+        .notFound((done) => done());
       r.navigate("/foo/bar", { resolveOptions: { strategy: "ONE" } });
       r.navigate("/nope");
       r.resolve("/foo/bar", { strategy: "ONE" });
@@ -477,13 +486,13 @@ describe("Given the Navigo library", () => {
   describe("when we have a custom root and we have a match", () => {
     it("should not include the root into the Match's url prop", () => {
       const r: NavigoRouter = new Navigo("/app");
-      const h = jest.fn();
+      const h = jest.fn((done) => done());
 
       r.on("/login", h);
       r.navigate("login");
 
       expect(h).toBeCalledTimes(1);
-      expect(h).toBeCalledWith({
+      expect(h).toBeCalledWith(expect.any(Function), {
         url: "login",
         data: null,
         params: null,

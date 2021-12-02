@@ -25,11 +25,17 @@
   "scripts": {
     "dev": "webpack --progress --watch --env dev",
     "dev-amd": "webpack --progress --watch --env dev --amd",
-    "release": "yarn test && webpack --env dev && webpack --env dev --amd && webpack --env build && webpack --env build --amd && yarn build-es",
+    "release": "npm run test && npm run build",
+    "build": "npm run build-umd && npm run build-amd && npm run build-es",
+    "build-umd": "webpack --env dev && webpack --env build",
+    "build-amd": "webpack --env dev --amd && webpack --env build --amd",
     "build-es": "babel src --no-babelrc --out-dir lib/es --extensions '.ts,.tsx' --ignore '**/*.spec.ts' --config-file ./.babelrc.es",
     "test": "./node_modules/.bin/jest",
     "test-watch": "./node_modules/.bin/jest --watch",
-    "repl": "node -i -e \"$(< ./lib/webpack-library-starter.js)\""
+    "repl": "node -i -e \"$(< ./lib/webpack-library-starter.js)\"",
+    "publish:check": "semantic-release --branch master --no-ci --dry-run",
+    "prepublishOnly": "npm run semantic-release",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
     "@babel/cli": "7.12.10",
@@ -39,6 +45,8 @@
     "@babel/preset-react": "7.12.10",
     "@babel/preset-typescript": "7.12.7",
     "@jest/console": "26.6.2",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
     "@types/jest": "26.0.19",
     "babel-jest": "26.6.3",
     "babel-loader": "^8.0.0-beta.4",
@@ -47,15 +55,44 @@
     "cross-env": "7.0.3",
     "jest": "26.6.3",
     "mocha": "^4.0.1",
+    "semantic-release": "^18.0.1",
     "webpack": "5.11.0",
     "webpack-cli": "4.2.0",
     "yargs": "^10.0.3"
   },
+  "files": [
+      "lib/*",
+      "index.d.ts"
+  ],
+
   "jest": {
     "setupFilesAfterEnv": [
       "./jest/setup.js"
     ],
     "verbose": false,
     "globals": {}
+  },
+  "release": {
+      "branches": [
+          "master"
+      ],
+      "plugins": [
+          "@semantic-release/commit-analyzer",
+          "@semantic-release/release-notes-generator",
+          "@semantic-release/github"
+      ],
+      "prepare": [
+          "@semantic-release/changelog",
+          "@semantic-release/npm",
+          {
+              "path": "@semantic-release/git",
+              "assets": [
+                  "index.d.ts",
+                  "package.json",
+                  "package-lock.json",
+                  "CHANGELOG.md"
+              ]
+          }
+      ]
   }
 }

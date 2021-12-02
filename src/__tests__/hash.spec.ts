@@ -13,7 +13,7 @@ describe("Given the Navigo library", () => {
     it("should resolve the hash string", () => {
       history.pushState({}, "", "/app/foo/bar#/about/team");
       const r: NavigoRouter = new Navigo("/", { hash: true });
-      const handler = jest.fn();
+      const handler = jest.fn((done) => done());
 
       r.on("about/team", handler);
       r.resolve();
@@ -23,7 +23,7 @@ describe("Given the Navigo library", () => {
     it("should change the hash when we navigate", () => {
       history.pushState({}, "", "/app/foo/bar");
       const r: NavigoRouter = new Navigo("/", { hash: true });
-      const handler = jest.fn();
+      const handler = jest.fn((done) => done());
 
       r.on("about/team", handler);
       r.navigate("about/team");

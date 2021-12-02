@@ -9,10 +9,10 @@ describe("Given the Navigo library", () => {
     it("should fallback to that route if no handler is found", () => {
       history.pushState({}, "", "/foo/bar?a=b#something-else");
       const r: NavigoRouter = new Navigo("/");
-      const notFound = jest.fn();
+      const notFound = jest.fn((done) => done());
       r.notFound(notFound).resolve();
 
-      expect(notFound).toBeCalledWith({
+      expect(notFound).toBeCalledWith(expect.any(Function), {
         data: null,
         route: {
           handler: expect.any(Function),

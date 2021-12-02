@@ -1,6 +1,7 @@
 import { QContext } from "../../index";
 import Q from "../Q";
 import { undefinedOrTrue } from "../utils";
+import executeHook from "./executeHook";
 
 export default function checkForBeforeHook(context: QContext, done) {
   if (
@@ -8,22 +9,7 @@ export default function checkForBeforeHook(context: QContext, done) {
     context.match.route.hooks.before &&
     undefinedOrTrue(context.navigateOptions, "callHooks")
   ) {
-    Q(
-      context.match.route.hooks.before
-        .map((f) => {
-          // just so we match the Q interface
-          return function beforeHookInternal(_, d) {
-            return f((shouldStop) => {
-              if (shouldStop === false) {
-                context.instance.__markAsClean(context);
-              } else {
-                d();
-              }
-            }, context.match);
-          };
-        })
-        .concat([() => done()])
-    );
+    executeHook(context, done, context.match.route.hooks.before, context.match);
   } else {
     done();
   }

@@ -137,7 +137,7 @@ describe("Given the Navigo library", () => {
     it("should properly extract the path", () => {
       const querySelectorAll = jest.spyOn(document, "querySelectorAll");
       let handler;
-      let routeHandler = jest.fn();
+      let routeHandler = jest.fn((done) => done());
 
       // @ts-ignore
       querySelectorAll.mockImplementationOnce(() => {
@@ -165,7 +165,7 @@ describe("Given the Navigo library", () => {
       });
 
       expect(routeHandler).toBeCalledTimes(1);
-      expect(routeHandler).toBeCalledWith({
+      expect(routeHandler).toBeCalledWith(expect.any(Function), {
         data: null,
         params: { x: "y" },
         queryString: "x=y",
@@ -186,7 +186,7 @@ describe("Given the Navigo library", () => {
     it("should keep the hash when updating the browser URL", (done) => {
       const querySelectorAll = jest.spyOn(document, "querySelectorAll");
       let handler;
-      let routeHandler = jest.fn();
+      let routeHandler = jest.fn((done) => done());
 
       // @ts-ignore
       querySelectorAll.mockImplementationOnce(() => {
@@ -229,7 +229,7 @@ describe("Given the Navigo library", () => {
     it("should navigate to the proper URL", (done) => {
       const querySelectorAll = jest.spyOn(document, "querySelectorAll");
       let handler;
-      let routeHandler = jest.fn();
+      let routeHandler = jest.fn((done) => done());
 
       // @ts-ignore
       querySelectorAll.mockImplementationOnce(() => {
