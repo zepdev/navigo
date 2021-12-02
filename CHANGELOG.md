@@ -1,3 +1,11 @@
+# 1.0.0 (2021-12-02)
+
+
+### Features
+
+* adding done-functionality to every hook and handler, switching to npm instead of yarn, adding circleci and semantic release ([3527f1a](https://github.com/zepdev/navigo/commit/3527f1a674a28f7a3717c09afcb4c149971ac033))
+* adding done-functionality to every hook and handler, switching to npm instead of yarn, adding circleci and semantic release ([5c41e7f](https://github.com/zepdev/navigo/commit/5c41e7f463e892fcf8eb715a8e21d07098a60cb8))
+
 ## 8.11.1
 
 Fixing a bug with history items when using hash based routing.
