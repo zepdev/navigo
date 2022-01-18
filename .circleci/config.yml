@@ -51,8 +51,8 @@ workflows:
   version: 2
   test_build_release:
     jobs:
-      - test:
-          context: Avengers
+#      - test:
+#          context: Avengers
 
       - build_and_release:
           context: Avengers
@@ -60,5 +60,5 @@ workflows:
             branches:
               only:
                 - master
-          requires:
-            - test
+#          requires:
+#            - test
