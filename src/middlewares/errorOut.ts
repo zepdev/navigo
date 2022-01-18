@@ -1,4 +1,4 @@
-import { QContext } from "../../index";
+import { QContext } from "../../index.js";
 
 export default function errorOut(context: QContext, done) {
   if (

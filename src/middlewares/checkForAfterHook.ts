@@ -1,6 +1,6 @@
-import { QContext } from "../../index";
-import { undefinedOrTrue } from "../utils";
-import executeHook from "./executeHook";
+import { QContext } from "../../index.js";
+import { undefinedOrTrue } from "../utils.js";
+import executeHook from "./executeHook.js";
 
 export default function checkForAfterHook(context: QContext, done) {
   if (

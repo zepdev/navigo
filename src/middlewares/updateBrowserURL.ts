@@ -1,5 +1,5 @@
-import { undefinedOrTrue, pushStateAvailable, windowAvailable } from "../utils";
-import { QContext } from "../../index";
+import { undefinedOrTrue, pushStateAvailable, windowAvailable } from "../utils.js";
+import { QContext } from "../../index.js";
 
 const isWindowAvailable = windowAvailable();
 const isPushStateAvailable = pushStateAvailable();

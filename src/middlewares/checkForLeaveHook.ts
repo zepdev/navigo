@@ -1,7 +1,7 @@
-import { QContext } from "../../index";
-import Q from "../Q";
-import { undefinedOrTrue } from "../utils";
-import executeHook from "./executeHook";
+import { QContext } from "../../index.js";
+import Q from "../Q.js";
+import { undefinedOrTrue } from "../utils.js";
+import executeHook from "./executeHook.js";
 
 export default function checkForLeaveHook(context: QContext, done) {
   const instance = context.instance;

@@ -1,4 +1,4 @@
-import { QContext } from "../../index";
+import { QContext } from "../../index.js";
 
 export default function checkForDeprecationMethods(context: QContext, done) {
   if (context.navigateOptions) {

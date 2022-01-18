@@ -1,8 +1,8 @@
-import { QContext } from "../../index";
-import Q from "../Q";
-import { foundLifecycle } from "../lifecycles";
-import updateState from "./updateState";
-import checkForLeaveHook from "./checkForLeaveHook";
+import { QContext } from "../../index.js";
+import Q from "../Q.js";
+import { foundLifecycle } from "../lifecycles.js";
+import updateState from "./updateState.js";
+import checkForLeaveHook from "./checkForLeaveHook.js";
 
 export default function processMatches(context: QContext, done) {
   let idx = 0;

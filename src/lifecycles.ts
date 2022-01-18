@@ -1,14 +1,14 @@
-import { QContext } from "../index";
-import Q from "./Q";
-import checkForLeaveHook from "./middlewares/checkForLeaveHook";
-import checkForBeforeHook from "./middlewares/checkForBeforeHook";
-import callHandler from "./middlewares/callHandler";
-import checkForAfterHook from "./middlewares/checkForAfterHook";
-import checkForAlreadyHook from "./middlewares/checkForAlreadyHook";
-import checkForNotFoundHandler from "./middlewares/checkForNotFoundHandler";
-import errorOut from "./middlewares/errorOut";
-import flushCurrent from "./middlewares/flushCurrent";
-import updateState from "./middlewares/updateState";
+import { QContext } from "../index.js";
+import Q from "./Q.js";
+import checkForLeaveHook from "./middlewares/checkForLeaveHook.js";
+import checkForBeforeHook from "./middlewares/checkForBeforeHook.js";
+import callHandler from "./middlewares/callHandler.js";
+import checkForAfterHook from "./middlewares/checkForAfterHook.js";
+import checkForAlreadyHook from "./middlewares/checkForAlreadyHook.js";
+import checkForNotFoundHandler from "./middlewares/checkForNotFoundHandler.js";
+import errorOut from "./middlewares/errorOut.js";
+import flushCurrent from "./middlewares/flushCurrent.js";
+import updateState from "./middlewares/updateState.js";
 
 export const foundLifecycle = [
   checkForAlreadyHook,

@@ -8,8 +8,8 @@ import {
   GenerateOptions,
   Handler,
   RouterOptions,
-} from "../index";
-import NavigoRouter from "../index";
+} from "../index.js";
+import NavigoRouter from "../index.js";
 import {
   pushStateAvailable,
   matchRoute,
@@ -23,17 +23,17 @@ import {
   getCurrentEnvURL,
   accumulateHooks,
   extractHashFromURL,
-} from "./utils";
-import Q from "./Q";
-import setLocationPath from "./middlewares/setLocationPath";
-import matchPathToRegisteredRoutes from "./middlewares/matchPathToRegisteredRoutes";
-import checkForDeprecationMethods from "./middlewares/checkForDeprecationMethods";
-import checkForForceOp from "./middlewares/checkForForceOp";
-import updateBrowserURL from "./middlewares/updateBrowserURL";
-import processMatches from "./middlewares/processMatches";
-import waitingList from "./middlewares/waitingList";
+} from "./utils.js";
+import Q from "./Q.js";
+import setLocationPath from "./middlewares/setLocationPath.js";
+import matchPathToRegisteredRoutes from "./middlewares/matchPathToRegisteredRoutes.js";
+import checkForDeprecationMethods from "./middlewares/checkForDeprecationMethods.js";
+import checkForForceOp from "./middlewares/checkForForceOp.js";
+import updateBrowserURL from "./middlewares/updateBrowserURL.js";
+import processMatches from "./middlewares/processMatches.js";
+import waitingList from "./middlewares/waitingList.js";
 
-import { notFoundLifeCycle } from "./lifecycles";
+import { notFoundLifeCycle } from "./lifecycles.js";
 
 const DEFAULT_LINK_SELECTOR = "[data-navigo]";
 

@@ -6,7 +6,7 @@ import {
   ResolveOptions,
   QContext,
   ResolveStrategy,
-} from "../index";
+} from "../index.js";
 
 import {
   PARAMETER_REGEXP,
@@ -17,7 +17,7 @@ import {
   MATCH_REGEXP_FLAGS,
   REPLACE_NOT_SURE,
   NOT_SURE_REGEXP,
-} from "./constants";
+} from "./constants.js";
 
 export function getCurrentEnvURL(fallback = "/"): string {
   if (windowAvailable()) {

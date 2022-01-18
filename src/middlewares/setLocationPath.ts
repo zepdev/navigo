@@ -1,5 +1,5 @@
-import { QContext } from "../../index";
-import { getCurrentEnvURL } from "../utils";
+import { QContext } from "../../index.js";
+import { getCurrentEnvURL } from "../utils.js";
 
 export default function setLocationPath(context: QContext, done) {
   if (typeof context.currentLocationPath === "undefined") {

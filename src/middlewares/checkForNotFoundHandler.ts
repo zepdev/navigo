@@ -1,10 +1,10 @@
-import { QContext, Match } from "../../index";
+import { QContext, Match } from "../../index.js";
 import {
   parseQuery,
   extractGETParameters,
   clean,
   extractHashFromURL,
-} from "../utils";
+} from "../utils.js";
 
 export default function checkForNotFoundHandler(context: QContext, done) {
   const notFoundRoute = context.instance._notFoundRoute;

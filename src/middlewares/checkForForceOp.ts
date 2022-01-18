@@ -1,4 +1,4 @@
-import { QContext } from "../../index";
+import { QContext } from "../../index.js";
 
 export default function checkForForceOp(context: QContext, done) {
   if (context.navigateOptions.force === true) {

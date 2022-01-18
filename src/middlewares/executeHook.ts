@@ -1,5 +1,5 @@
-import {AfterHook, AlreadyHook, BeforeHook, LeaveHook, QContext} from "../../index";
-import Q from "../Q";
+import {AfterHook, AlreadyHook, BeforeHook, LeaveHook, QContext} from "../../index.js";
+import Q from "../Q.js";
 
 export default function executeHook(context: QContext, done, hooks: BeforeHook[] | AfterHook[] | LeaveHook[] | AlreadyHook[], match, doneArgs = []) {
   Q(

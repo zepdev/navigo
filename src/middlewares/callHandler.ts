@@ -1,5 +1,5 @@
-import { QContext } from "../../index";
-import { undefinedOrTrue } from "../utils";
+import { QContext } from "../../index.js";
+import { undefinedOrTrue } from "../utils.js";
 
 export default function callHandler(context: QContext, done) {
   const d = function() {

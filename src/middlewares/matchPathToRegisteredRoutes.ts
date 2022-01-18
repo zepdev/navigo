@@ -1,5 +1,5 @@
-import { matchRoute } from "../utils";
-import { QContext, Match } from "../../index";
+import { matchRoute } from "../utils.js";
+import { QContext, Match } from "../../index.js";
 
 export default function matchPathToRegisteredRoutes(context: QContext, done) {
   for (let i = 0; i < context.instance.routes.length; i++) {
