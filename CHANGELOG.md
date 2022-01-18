@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/zepdev/navigo/compare/v1.0.0...v1.1.0) (2022-01-18)
+
+
+### Features
+
+* adding file extension "js" to imports ([05c5dc2](https://github.com/zepdev/navigo/commit/05c5dc282d92a84bc6aa7e570151d173b132caa1))
+* adding file extension "js" to imports ([695301d](https://github.com/zepdev/navigo/commit/695301dccc3b5554f34610fe7a593161575c4d58))
+
 # 1.0.0 (2021-12-02)
 
 
