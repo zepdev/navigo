@@ -109,3 +109,4 @@ Checkout the [online playground](https://codesandbox.io/s/navigo-example-jrui8) 
 ## MISC
 
 * [A modern JavaScript router in 100 lines](http://krasimirtsonev.com/blog/article/A-modern-JavaScript-router-in-100-lines-history-api-pushState-hash-url)
+
