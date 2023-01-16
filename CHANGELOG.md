@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/zepdev/navigo/compare/v1.1.0...v1.1.1) (2023-01-16)
+
+
+### Bug Fixes
+
+* testing build ([3b8186d](https://github.com/zepdev/navigo/commit/3b8186dde557b35051cb702f37677991ddcd505e))
+
 # [1.1.0](https://github.com/zepdev/navigo/compare/v1.0.0...v1.1.0) (2022-01-18)
 
 
