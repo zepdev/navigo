@@ -1,7 +1,7 @@
 import { matchRoute } from "../utils.js";
 import { QContext, Match } from "../../index.js";
 
-export default function matchPathToRegisteredRoutes(context: QContext, done) {
+export default function matchPathToRegisteredRoutes(context: QContext, done: () => void) {
   for (let i = 0; i < context.instance.routes.length; i++) {
     const route = context.instance.routes[i];
     const match: false | Match = matchRoute(context, route);
